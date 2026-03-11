@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:NoRecoilApp.Maui.ViewModels"
+             xmlns:models="clr-namespace:NoRecoilApp.Maui.Models"
+             x:Class="NoRecoilApp.Maui.MainPage"
+             x:Name="RootPage"
+             x:DataType="vm:MainViewModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="CardBorderStyle" TargetType="Border">
+                <Setter Property="Padding" Value="14" />
+                <Setter Property="Background" Value="#111827" />
+                <Setter Property="Stroke" Value="#253041" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape">
+                    <RoundRectangle CornerRadius="14" />
+                </Setter>
+            </Style>
+
+            <Style x:Key="TabButtonStyle" TargetType="Button">
+                <Setter Property="Padding" Value="18,13" />
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="FontFamily" Value="OpenSansSemibold" />
+                <Setter Property="CornerRadius" Value="12" />
+                <Setter Property="MinimumHeightRequest" Value="44" />
+                <Setter Property="MinimumWidthRequest" Value="92" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="12" Padding="16">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#0B1220" Offset="0.0" />
+                <GradientStop Color="#0E1526" Offset="0.45" />
+                <GradientStop Color="#0F172A" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Border x:Name="HeaderCard" Grid.Row="0" Padding="0" Stroke="#2A3D5A" StrokeThickness="1.4">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="18" />
+            </Border.StrokeShape>
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#111B2D" Offset="0.0" />
+                    <GradientStop Color="#15253C" Offset="0.55" />
+                    <GradientStop Color="#0F1A2B" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <Border.Shadow>
+                <Shadow Brush="#0A1324" Opacity="0.55" Radius="14" Offset="0,6" />
+            </Border.Shadow>
+
+            <Grid Padding="16" RowDefinitions="Auto,Auto,Auto" RowSpacing="12">
+                <Grid Grid.Row="0" ColumnDefinitions="*" ColumnSpacing="10">
+                    <VerticalStackLayout Grid.Column="0" Spacing="2">
+                        <Label Text="NO RECOIL STUDIO" FontSize="24" FontFamily="OpenSansSemibold" TextColor="#F6FAFF" />
+                        <Label Text=".NET 10 | EF Core | SQLite | MAUI" FontSize="12" TextColor="#9DB2CB" />
+                    </VerticalStackLayout>
+</Grid>
+
+                <Grid Grid.Row="1" RowDefinitions="Auto" RowSpacing="7">
+                    <Grid Grid.Row="0" ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Border Grid.Column="0" Padding="8,6" Background="#111F34" Stroke="#2C4A70" StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Recoil (F2)" FontSize="11" TextColor="#9DB2CB" />
+                                <Label Text="{Binding EngineStatusText}" TextColor="{Binding EngineStatusColor}" FontFamily="OpenSansSemibold" FontSize="13" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="1" Padding="8,6" Background="#111F34" Stroke="#2C4A70" StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="ADS Assist (F3)" FontSize="11" TextColor="#9DB2CB" />
+                                <Label Text="{Binding AdsStatusText}" TextColor="{Binding AdsStatusColor}" FontFamily="OpenSansSemibold" FontSize="13" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+</Grid>
+
+                <Border Grid.Row="2" Padding="10,8" Background="#111F34" Stroke="#2C4A70" StrokeThickness="1.2">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding HasLoadedProfile}" Value="True">
+                            <Setter Property="Background" Value="#123B2F" />
+                            <Setter Property="Stroke" Value="#2ECC71" />
+                            <Setter Property="StrokeThickness" Value="2" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Perfil carregado" FontSize="11" TextColor="#9DB2CB" />
+                        <Label Text="{Binding LoadedProfileStatusText}" FontSize="13" FontFamily="OpenSansSemibold" TextColor="{Binding LoadedProfileStatusColor}" LineBreakMode="TailTruncation" MaxLines="1" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Style="{StaticResource CardBorderStyle}" Padding="8">
+            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                <Button Style="{StaticResource TabButtonStyle}" Text="RECOIL" Command="{Binding SelectTabCommand}" CommandParameter="Recoil" BackgroundColor="{Binding RecoilTabBackground}" TextColor="{Binding RecoilTabText}" />
+                <Button Style="{StaticResource TabButtonStyle}" Text="CURVA" Command="{Binding SelectTabCommand}" CommandParameter="Curva" BackgroundColor="{Binding CurveTabBackground}" TextColor="{Binding CurveTabText}" />
+                <Button Style="{StaticResource TabButtonStyle}" Text="ADS" Command="{Binding SelectTabCommand}" CommandParameter="ADS" BackgroundColor="{Binding AdsTabBackground}" TextColor="{Binding AdsTabText}" />
+                <Button Style="{StaticResource TabButtonStyle}" Text="PERFIS" Command="{Binding SelectTabCommand}" CommandParameter="Perfis" BackgroundColor="{Binding ProfilesTabBackground}" TextColor="{Binding ProfilesTabText}" />
+                <Button Style="{StaticResource TabButtonStyle}" Text="CONFIG" Command="{Binding SelectTabCommand}" CommandParameter="Config" BackgroundColor="{Binding ConfigTabBackground}" TextColor="{Binding ConfigTabText}" />
+            </HorizontalStackLayout>
+        </Border>
+
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout x:Name="TabContentHost" Spacing="12">
+                <Border x:Name="RecoilSection" IsVisible="{Binding IsRecoilTab}" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Editor de Perfil" FontFamily="OpenSansSemibold" TextColor="#E6EDF3" />
+                        <Grid ColumnDefinitions="*,*,Auto" ColumnSpacing="8">
+                            <Entry Grid.Column="0" Placeholder="Operador" Text="{Binding OperatorName}" TextColor="#E6EDF3" PlaceholderColor="#6E7681" />
+                            <Entry Grid.Column="1" Placeholder="Arma" Text="{Binding WeaponName}" TextColor="#E6EDF3" PlaceholderColor="#6E7681" />
+                            <Button Grid.Column="2"
+                                    Text="{Binding SideToggleText}"
+                                    Command="{Binding ToggleSideCommand}"
+                                    BackgroundColor="{Binding SideToggleBackground}"
+                                    TextColor="{Binding SideToggleTextColor}"
+                                    WidthRequest="110" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label Grid.Column="0" Text="Vertical (Y)" TextColor="#C9D1D9" />
+                            <Entry Grid.Column="1" Text="{Binding StrengthYInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
+                        </Grid>
+                        <Slider Minimum="0" Maximum="15" Value="{Binding StrengthY}" />
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label Grid.Column="0" Text="Horizontal (X)" TextColor="#C9D1D9" />
+                            <Entry Grid.Column="1" Text="{Binding StrengthXInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
+                        </Grid>
+                        <Slider Minimum="-8" Maximum="8" Value="{Binding StrengthX}" />
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label Grid.Column="0" Text="Delay (s)" TextColor="#C9D1D9" />
+                            <Entry Grid.Column="1" Text="{Binding DelayInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
+                        </Grid>
+                        <Slider Minimum="0.005" Maximum="0.03" Value="{Binding Delay}" />
+                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                            <Button Grid.Column="0" Text="Novo" Command="{Binding NewProfileCommand}" BackgroundColor="#30363D" TextColor="#E6EDF3" HorizontalOptions="Start" />
+                            <Button Grid.Column="1" Text="Salvar" Command="{Binding SaveProfileCommand}" BackgroundColor="#238636" TextColor="White" />
+                            <Button Grid.Column="2" Text="Excluir" Command="{Binding DeleteProfileCommand}" BackgroundColor="#DA3633" TextColor="White" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border x:Name="CurveSection" IsVisible="{Binding IsCurveTab}" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Curva de Progressao" FontFamily="OpenSansSemibold" TextColor="#E6EDF3" />
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label Grid.Column="0" Text="Suavizacao" TextColor="#C9D1D9" />
+                            <Entry Grid.Column="1" Text="{Binding SmoothInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
+                        </Grid>
+                        <Slider Minimum="1" Maximum="15" Value="{Binding Smooth}" />
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label Grid.Column="0" Text="Fator Exponencial" TextColor="#C9D1D9" />
+                            <Entry Grid.Column="1" Text="{Binding AccelFactorInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
+                        </Grid>
+                        <Slider Minimum="1" Maximum="3" Value="{Binding AccelFactor}" />
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label Grid.Column="0" Text="Max Progressao" TextColor="#C9D1D9" />
+                            <Entry Grid.Column="1" Text="{Binding MaxProgressionInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
+                        </Grid>
+                        <Slider Minimum="1" Maximum="6" Value="{Binding MaxProgression}" />
+                        <Label Text="Ajuste fino para estabilidade e controle no spray longo." FontSize="12" TextColor="#8FA3BF" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border x:Name="AdsSection" IsVisible="{Binding IsAdsTab}" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="ADS Assist" FontFamily="OpenSansSemibold" TextColor="#E6EDF3" />
+                        <Label Text="{Binding AdsStatusText}" TextColor="{Binding AdsStatusColor}" FontFamily="OpenSansSemibold" />
+                        <Label Text="Atalho global: pressione F3 para ligar/desligar o ADS Assist." FontSize="12" TextColor="#8FA3BF" />
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label Grid.Column="0" Text="Tempo ADS (ms)" TextColor="#C9D1D9" />
+                            <Entry Grid.Column="1" Text="{Binding AdsHoldInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
+                        </Grid>
+                        <Slider Minimum="0" Maximum="250" Value="{Binding AdsHoldMilliseconds}" />
+
+                        <Button Text="Alternar ADS (F3)"
+                                Command="{Binding ToggleAdsCommand}"
+                                BackgroundColor="#1F6FEB"
+                                TextColor="White" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border x:Name="ProfilesSection" IsVisible="{Binding IsProfilesTab}" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Perfis Salvos" FontFamily="OpenSansSemibold" TextColor="#E6EDF3" />
+                        <Entry Placeholder="Buscar operador ou arma" Text="{Binding SearchQuery}" TextColor="#E6EDF3" PlaceholderColor="#6E7681" />
+                        <Picker Title="Filtro" ItemsSource="{Binding SideFilterChoices}" SelectedItem="{Binding SideFilter}" TextColor="#E6EDF3" TitleColor="#8B949E" />                        <CollectionView ItemsSource="{Binding Profiles}"
+                                        SelectionMode="Single"
+                                        SelectedItem="{Binding SelectedProfile, Mode=TwoWay}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:WeaponProfile">
+                                    <Border Padding="10" Margin="0,4" Background="#161B22" Stroke="#2D3748" StrokeThickness="1">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" />
+                                        </Border.StrokeShape>
+                                        <Border.Triggers>
+                                            <DataTrigger TargetType="Border" Binding="{Binding IsActive}" Value="True">
+                                                <Setter Property="Background" Value="#123B2F" />
+                                                <Setter Property="Stroke" Value="#2ECC71" />
+                                                <Setter Property="StrokeThickness" Value="2" />
+                                            </DataTrigger>
+                                        </Border.Triggers>
+                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                                            <Label Grid.Column="0" Text="{Binding Side}" FontFamily="OpenSansSemibold" VerticalOptions="Center" TextColor="#E6EDF3" />
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding OperatorName}" FontFamily="OpenSansSemibold" TextColor="#E6EDF3" />
+                                                <Label Text="{Binding WeaponName}" FontSize="12" TextColor="#9BA7B4" />
+                                                <Label Text="EM USO"
+                                                       FontSize="10"
+                                                       FontFamily="OpenSansSemibold"
+                                                       TextColor="#2ECC71"
+                                                       IsVisible="{Binding IsActive}" />
+                                            </VerticalStackLayout>
+                                            <Button Grid.Column="2" Text="Carregar"
+                                                    Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.LoadProfileCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    BackgroundColor="#1F6FEB" TextColor="White" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border x:Name="ConfigSection" IsVisible="{Binding IsConfigTab}" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Configuracoes" FontFamily="OpenSansSemibold" TextColor="#E6EDF3" />
+                        <Label Text="{Binding RuntimeSummary}" FontSize="12" TextColor="#8FA3BF" />
+                        <Button Text="Atualizar Lista de Perfis" Command="{Binding RefreshProfilesCommand}" BackgroundColor="#30363D" TextColor="#E6EDF3" />
+                        <Button Text="Resetar Tudo" Command="{Binding ResetProfilesCommand}" BackgroundColor="#9E6A03" TextColor="White" />
+                        <Label Text="UI otimizada para foco e fluxo rapido com menor carga cognitiva." FontSize="12" TextColor="#8FA3BF" />
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

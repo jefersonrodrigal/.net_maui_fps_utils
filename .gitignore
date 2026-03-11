@@ -1,0 +1,74 @@
+# ==================================
+# Pastas de Build e Artefatos do .NET
+# ==================================
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# ==================================
+# Visual Studio / VS Code
+# ==================================
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.cache
+
+# ==================================
+# Específicos do Android
+# ==================================
+*.apk
+*.aab
+*.dex
+*.class
+*.keystore
+
+# ==================================
+# Específicos do iOS / Mac
+# ==================================
+*.ipa
+*.dSYM/
+.DS_Store
+xcuserdata/
+
+# ==================================
+# Específicos do Windows (.NET MAUI)
+# ==================================
+*.appx
+*.appxsym
+*.appxbundle
+*.msix
+*.msixbundle
+*.msixupload
+AppPackages/
+
+# ==================================
+# Bancos de Dados Locais (Opcional)
+# ==================================
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# ==================================
+# Outros Arquivos Temporários
+# ==================================
+*.bak
+*.tmp
+*.log
+Thumbs.db
