@@ -3,105 +3,140 @@ using NoRecoilApp.Maui.Models;
 
 namespace NoRecoilApp.Maui.Data;
 
-public sealed class WeaponProfileRepository(IDbContextFactory<AppDbContext> contextFactory) : IWeaponProfileRepository
+public sealed class WeaponProfileRepository(
+    IDbContextFactory<AppDbContext> dbFactory) : IWeaponProfileRepository
 {
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
-        await using var db = await contextFactory.CreateDbContextAsync(cancellationToken);
+        await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
         await db.Database.EnsureCreatedAsync(cancellationToken);
     }
 
-    public async Task<IReadOnlyList<WeaponProfile>> SearchAsync(string query, string sideFilter, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<WeaponProfile>> SearchAsync(
+        string query,
+        string sideFilter,
+        CancellationToken cancellationToken = default)
     {
-        await using var db = await contextFactory.CreateDbContextAsync(cancellationToken);
+        await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 
-        var normalizedQuery = query.Trim();
-        var normalizedSide = sideFilter.Trim().ToUpperInvariant();
+        var q = db.WeaponProfiles
+                  .Include(w => w.SprayPoints)
+                  .AsNoTracking()
+                  .AsQueryable();
 
-        IQueryable<WeaponProfile> sql = db.WeaponProfiles.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(sideFilter) && sideFilter != "TODOS")
+            q = q.Where(w => w.Side == sideFilter);
 
-        if (!string.IsNullOrWhiteSpace(normalizedQuery))
-        {
-            var pattern = $"%{normalizedQuery}%";
-            sql = sql.Where(x =>
-                EF.Functions.Like(x.OperatorName, pattern) ||
-                EF.Functions.Like(x.WeaponName, pattern));
-        }
+        if (!string.IsNullOrWhiteSpace(query))
+            q = q.Where(w =>
+                w.OperatorName.Contains(query) ||
+                w.WeaponName.Contains(query));
 
-        if (normalizedSide is "ATK" or "DEF")
-        {
-            sql = sql.Where(x => x.Side == normalizedSide);
-        }
-
-        return await sql
-            .OrderBy(x => x.OperatorName)
-            .ThenBy(x => x.WeaponName)
+        var result = await q
+            .OrderBy(w => w.OperatorName)
+            .ThenBy(w => w.WeaponName)
             .ToListAsync(cancellationToken);
+
+        foreach (var profile in result)
+            profile.SprayPoints = [.. profile.SprayPoints.OrderBy(p => p.Index)];
+
+        return result;
     }
 
-    public async Task<WeaponProfile?> FindByIdentityAsync(string operatorName, string weaponName, CancellationToken cancellationToken = default)
+    public async Task<WeaponProfile?> FindByIdentityAsync(
+        string operatorName,
+        string weaponName,
+        CancellationToken cancellationToken = default)
     {
-        await using var db = await contextFactory.CreateDbContextAsync(cancellationToken);
-        return await db.WeaponProfiles
-            .AsNoTracking()
-            .FirstOrDefaultAsync(
-                x => x.OperatorName == operatorName && x.WeaponName == weaponName,
-                cancellationToken);
+        await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
+
+        var profile = await db.WeaponProfiles
+            .Include(w => w.SprayPoints)
+            .Where(w => w.OperatorName == operatorName &&
+                        w.WeaponName == weaponName)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (profile is not null)
+            profile.SprayPoints = [.. profile.SprayPoints.OrderBy(p => p.Index)];
+
+        return profile;
     }
 
-    public async Task SaveAsync(WeaponProfile profile, CancellationToken cancellationToken = default)
+    public async Task SaveAsync(
+        WeaponProfile profile,
+        CancellationToken cancellationToken = default)
     {
-        await using var db = await contextFactory.CreateDbContextAsync(cancellationToken);
+        await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 
-        var op = profile.OperatorName.Trim();
-        var wp = profile.WeaponName.Trim();
+        profile.UpdatedAtUtc = DateTime.UtcNow;
 
         var existing = await db.WeaponProfiles
-            .FirstOrDefaultAsync(x => x.OperatorName == op && x.WeaponName == wp, cancellationToken);
+            .Include(w => w.SprayPoints)
+            .Where(w => w.OperatorName == profile.OperatorName &&
+                        w.WeaponName == profile.WeaponName)
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (existing is null)
         {
-            profile.OperatorName = op;
-            profile.WeaponName = wp;
-            profile.Side = profile.Side.ToUpperInvariant();
-            profile.UpdatedAtUtc = DateTime.UtcNow;
+            NormalizeSprayIndexes(profile.SprayPoints);
             await db.WeaponProfiles.AddAsync(profile, cancellationToken);
         }
         else
         {
-            existing.Side = profile.Side.ToUpperInvariant();
+            existing.Side = profile.Side;
             existing.StrengthY = profile.StrengthY;
             existing.StrengthX = profile.StrengthX;
             existing.Delay = profile.Delay;
             existing.Smooth = profile.Smooth;
             existing.AccelFactor = profile.AccelFactor;
             existing.MaxProgression = profile.MaxProgression;
-            existing.UpdatedAtUtc = DateTime.UtcNow;
+            existing.UseSprayPattern = profile.UseSprayPattern;
+            existing.FireRateRpm = profile.FireRateRpm;
+            existing.UpdatedAtUtc = profile.UpdatedAtUtc;
+
+            db.SprayPoints.RemoveRange(existing.SprayPoints);
+
+            NormalizeSprayIndexes(profile.SprayPoints);
+
+            foreach (var point in profile.SprayPoints)
+            {
+                point.Id = 0;
+                point.WeaponProfileId = existing.Id;
+            }
+
+            await db.SprayPoints.AddRangeAsync(profile.SprayPoints, cancellationToken);
         }
 
         await db.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteAsync(string operatorName, string weaponName, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(
+        string operatorName,
+        string weaponName,
+        CancellationToken cancellationToken = default)
     {
-        await using var db = await contextFactory.CreateDbContextAsync(cancellationToken);
+        await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
 
-        var existing = await db.WeaponProfiles
-            .FirstOrDefaultAsync(x => x.OperatorName == operatorName && x.WeaponName == weaponName, cancellationToken);
+        var rows = await db.WeaponProfiles
+            .Where(w => w.OperatorName == operatorName &&
+                        w.WeaponName == weaponName)
+            .ExecuteDeleteAsync(cancellationToken);
 
-        if (existing is null)
-        {
-            return;
-        }
-
-        db.WeaponProfiles.Remove(existing);
-        await db.SaveChangesAsync(cancellationToken);
+        if (rows == 0)
+            throw new KeyNotFoundException(
+                $"Perfil '{operatorName} | {weaponName}' não encontrado.");
     }
 
     public async Task ResetAsync(CancellationToken cancellationToken = default)
     {
-        await using var db = await contextFactory.CreateDbContextAsync(cancellationToken);
-        db.WeaponProfiles.RemoveRange(db.WeaponProfiles);
-        await db.SaveChangesAsync(cancellationToken);
+        await using var db = await dbFactory.CreateDbContextAsync(cancellationToken);
+        await db.SprayPoints.ExecuteDeleteAsync(cancellationToken);
+        await db.WeaponProfiles.ExecuteDeleteAsync(cancellationToken);
+    }
+
+    private static void NormalizeSprayIndexes(IList<SprayPoint> points)
+    {
+        for (var i = 0; i < points.Count; i++)
+            points[i].Index = i;
     }
 }

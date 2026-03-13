@@ -21,13 +21,16 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
+        // C:\Users\User\AppData\Local\User Name\com.companyname.norecoilapp.maui\Data\
         var dbPath = Path.Combine(FileSystem.AppDataDirectory, "recoil_profiles.db");
+
         builder.Services.AddDbContextFactory<AppDbContext>(options =>
             options.UseSqlite($"Data Source={dbPath};Cache=Shared;Pooling=True"));
 
         builder.Services.AddSingleton<IWeaponProfileRepository, WeaponProfileRepository>();
         builder.Services.AddSingleton<IRecoilEngineService, RecoilEngineService>();
         builder.Services.AddSingleton<MainViewModel>();
+        builder.Services.AddSingleton<MainPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

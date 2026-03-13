@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:NoRecoilApp.Maui.ViewModels"
-             xmlns:models="clr-namespace:NoRecoilApp.Maui.Models"
-             x:Class="NoRecoilApp.Maui.MainPage"
-             x:Name="RootPage"
-             x:DataType="vm:MainViewModel">
+<ContentPage
+    x:Class="NoRecoilApp.Maui.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:NoRecoilApp.Maui.Models"
+    xmlns:vm="clr-namespace:NoRecoilApp.Maui.ViewModels"
+    x:Name="RootPage"
+    x:DataType="vm:MainViewModel">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -27,213 +28,879 @@
                 <Setter Property="MinimumHeightRequest" Value="44" />
                 <Setter Property="MinimumWidthRequest" Value="92" />
             </Style>
+
+            <!--  ✅ NOVO: botão menor para abas extras  -->
+            <Style
+                x:Key="TabButtonSmallStyle"
+                BasedOn="{StaticResource TabButtonStyle}"
+                TargetType="Button">
+                <Setter Property="Padding" Value="14,13" />
+                <Setter Property="MinimumWidthRequest" Value="76" />
+            </Style>
+
+            <!--  ✅ NOVO: botão de ação de linha nos pontos  -->
+            <Style x:Key="RowActionButtonStyle" TargetType="Button">
+                <Setter Property="WidthRequest" Value="36" />
+                <Setter Property="HeightRequest" Value="36" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="BackgroundColor" Value="#30363D" />
+                <Setter Property="TextColor" Value="#E6EDF3" />
+            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="12" Padding="16">
+    <Grid
+        Padding="16"
+        RowDefinitions="Auto,Auto,*"
+        RowSpacing="12">
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#0B1220" Offset="0.0" />
-                <GradientStop Color="#0E1526" Offset="0.45" />
-                <GradientStop Color="#0F172A" Offset="1.0" />
+                <GradientStop Offset="0.0" Color="#0B1220" />
+                <GradientStop Offset="0.45" Color="#0E1526" />
+                <GradientStop Offset="1.0" Color="#0F172A" />
             </LinearGradientBrush>
         </Grid.Background>
 
-        <Border x:Name="HeaderCard" Grid.Row="0" Padding="0" Stroke="#2A3D5A" StrokeThickness="1.4">
+        <!--  ── HEADER (INALTERADO) ───────────────────────────────────────  -->
+        <Border
+            x:Name="HeaderCard"
+            Grid.Row="0"
+            Padding="0"
+            Stroke="#2A3D5A"
+            StrokeThickness="1.4">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="18" />
             </Border.StrokeShape>
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#111B2D" Offset="0.0" />
-                    <GradientStop Color="#15253C" Offset="0.55" />
-                    <GradientStop Color="#0F1A2B" Offset="1.0" />
+                    <GradientStop Offset="0.0" Color="#111B2D" />
+                    <GradientStop Offset="0.55" Color="#15253C" />
+                    <GradientStop Offset="1.0" Color="#0F1A2B" />
                 </LinearGradientBrush>
             </Border.Background>
             <Border.Shadow>
-                <Shadow Brush="#0A1324" Opacity="0.55" Radius="14" Offset="0,6" />
+                <Shadow
+                    Brush="#0A1324"
+                    Opacity="0.55"
+                    Radius="14"
+                    Offset="0,6" />
             </Border.Shadow>
 
-            <Grid Padding="16" RowDefinitions="Auto,Auto,Auto" RowSpacing="12">
-                <Grid Grid.Row="0" ColumnDefinitions="*" ColumnSpacing="10">
+            <Grid
+                Padding="16"
+                RowDefinitions="Auto,Auto,Auto"
+                RowSpacing="12">
+                <Grid Grid.Row="0" ColumnDefinitions="*">
                     <VerticalStackLayout Grid.Column="0" Spacing="2">
-                        <Label Text="NO RECOIL STUDIO" FontSize="24" FontFamily="OpenSansSemibold" TextColor="#F6FAFF" />
-                        <Label Text=".NET 10 | EF Core | SQLite | MAUI" FontSize="12" TextColor="#9DB2CB" />
+                        <Label
+                            FontFamily="OpenSansSemibold"
+                            FontSize="24"
+                            Text="NO RECOIL STUDIO"
+                            TextColor="#F6FAFF" />
+                        <Label
+                            FontSize="12"
+                            Text=".NET 10 | EF Core | SQLite | MAUI"
+                            TextColor="#9DB2CB" />
                     </VerticalStackLayout>
-</Grid>
+                </Grid>
 
-                <Grid Grid.Row="1" RowDefinitions="Auto" RowSpacing="7">
-                    <Grid Grid.Row="0" ColumnDefinitions="*,*" ColumnSpacing="8">
-                        <Border Grid.Column="0" Padding="8,6" Background="#111F34" Stroke="#2C4A70" StrokeThickness="1">
+                <Grid
+                    Grid.Row="1"
+                    RowDefinitions="Auto"
+                    RowSpacing="7">
+                    <Grid
+                        Grid.Row="0"
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="8">
+                        <Border
+                            Grid.Column="0"
+                            Padding="8,6"
+                            Background="#111F34"
+                            Stroke="#2C4A70"
+                            StrokeThickness="1">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="10" />
                             </Border.StrokeShape>
                             <VerticalStackLayout Spacing="2">
-                                <Label Text="Recoil (F2)" FontSize="11" TextColor="#9DB2CB" />
-                                <Label Text="{Binding EngineStatusText}" TextColor="{Binding EngineStatusColor}" FontFamily="OpenSansSemibold" FontSize="13" />
+                                <Label
+                                    FontSize="11"
+                                    Text="Recoil (F2)"
+                                    TextColor="#9DB2CB" />
+                                <Label
+                                    FontFamily="OpenSansSemibold"
+                                    FontSize="13"
+                                    Text="{Binding EngineStatusText}"
+                                    TextColor="{Binding EngineStatusColor}" />
                             </VerticalStackLayout>
                         </Border>
 
-                        <Border Grid.Column="1" Padding="8,6" Background="#111F34" Stroke="#2C4A70" StrokeThickness="1">
+                        <Border
+                            Grid.Column="1"
+                            Padding="8,6"
+                            Background="#111F34"
+                            Stroke="#2C4A70"
+                            StrokeThickness="1">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="10" />
                             </Border.StrokeShape>
                             <VerticalStackLayout Spacing="2">
-                                <Label Text="ADS Assist (F3)" FontSize="11" TextColor="#9DB2CB" />
-                                <Label Text="{Binding AdsStatusText}" TextColor="{Binding AdsStatusColor}" FontFamily="OpenSansSemibold" FontSize="13" />
+                                <Label
+                                    FontSize="11"
+                                    Text="ADS Assist (F3)"
+                                    TextColor="#9DB2CB" />
+                                <Label
+                                    FontFamily="OpenSansSemibold"
+                                    FontSize="13"
+                                    Text="{Binding AdsStatusText}"
+                                    TextColor="{Binding AdsStatusColor}" />
                             </VerticalStackLayout>
                         </Border>
                     </Grid>
-</Grid>
+                </Grid>
 
-                <Border Grid.Row="2" Padding="10,8" Background="#111F34" Stroke="#2C4A70" StrokeThickness="1.2">
+                <Border
+                    Grid.Row="2"
+                    Padding="10,8"
+                    Background="#111F34"
+                    Stroke="#2C4A70"
+                    StrokeThickness="1.2">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="10" />
                     </Border.StrokeShape>
                     <Border.Triggers>
-                        <DataTrigger TargetType="Border" Binding="{Binding HasLoadedProfile}" Value="True">
+                        <DataTrigger
+                            Binding="{Binding HasLoadedProfile}"
+                            TargetType="Border"
+                            Value="True">
                             <Setter Property="Background" Value="#123B2F" />
                             <Setter Property="Stroke" Value="#2ECC71" />
                             <Setter Property="StrokeThickness" Value="2" />
                         </DataTrigger>
                     </Border.Triggers>
                     <VerticalStackLayout Spacing="2">
-                        <Label Text="Perfil carregado" FontSize="11" TextColor="#9DB2CB" />
-                        <Label Text="{Binding LoadedProfileStatusText}" FontSize="13" FontFamily="OpenSansSemibold" TextColor="{Binding LoadedProfileStatusColor}" LineBreakMode="TailTruncation" MaxLines="1" />
+                        <Label
+                            FontSize="11"
+                            Text="Perfil carregado"
+                            TextColor="#9DB2CB" />
+                        <Label
+                            FontFamily="OpenSansSemibold"
+                            FontSize="13"
+                            LineBreakMode="TailTruncation"
+                            MaxLines="1"
+                            Text="{Binding LoadedProfileStatusText}"
+                            TextColor="{Binding LoadedProfileStatusColor}" />
                     </VerticalStackLayout>
                 </Border>
             </Grid>
         </Border>
 
-        <Border Grid.Row="1" Style="{StaticResource CardBorderStyle}" Padding="8">
-            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
-                <Button Style="{StaticResource TabButtonStyle}" Text="RECOIL" Command="{Binding SelectTabCommand}" CommandParameter="Recoil" BackgroundColor="{Binding RecoilTabBackground}" TextColor="{Binding RecoilTabText}" />
-                <Button Style="{StaticResource TabButtonStyle}" Text="CURVA" Command="{Binding SelectTabCommand}" CommandParameter="Curva" BackgroundColor="{Binding CurveTabBackground}" TextColor="{Binding CurveTabText}" />
-                <Button Style="{StaticResource TabButtonStyle}" Text="ADS" Command="{Binding SelectTabCommand}" CommandParameter="ADS" BackgroundColor="{Binding AdsTabBackground}" TextColor="{Binding AdsTabText}" />
-                <Button Style="{StaticResource TabButtonStyle}" Text="PERFIS" Command="{Binding SelectTabCommand}" CommandParameter="Perfis" BackgroundColor="{Binding ProfilesTabBackground}" TextColor="{Binding ProfilesTabText}" />
-                <Button Style="{StaticResource TabButtonStyle}" Text="CONFIG" Command="{Binding SelectTabCommand}" CommandParameter="Config" BackgroundColor="{Binding ConfigTabBackground}" TextColor="{Binding ConfigTabText}" />
-            </HorizontalStackLayout>
+        <!--  ── TABS (✅ adicionado botão SPRAY) ────────────────────────────  -->
+        <Border
+            Grid.Row="1"
+            Padding="8"
+            Style="{StaticResource CardBorderStyle}">
+            <ScrollView HorizontalScrollBarVisibility="Never" Orientation="Horizontal">
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
+                    <Button
+                        BackgroundColor="{Binding RecoilTabBackground}"
+                        Command="{Binding SelectTabCommand}"
+                        CommandParameter="Recoil"
+                        Style="{StaticResource TabButtonStyle}"
+                        Text="RECOIL"
+                        TextColor="{Binding RecoilTabText}" />
+                    <Button
+                        BackgroundColor="{Binding CurveTabBackground}"
+                        Command="{Binding SelectTabCommand}"
+                        CommandParameter="Curva"
+                        Style="{StaticResource TabButtonStyle}"
+                        Text="CURVA"
+                        TextColor="{Binding CurveTabText}" />
+                    <Button
+                        BackgroundColor="{Binding AdsTabBackground}"
+                        Command="{Binding SelectTabCommand}"
+                        CommandParameter="ADS"
+                        Style="{StaticResource TabButtonStyle}"
+                        Text="ADS"
+                        TextColor="{Binding AdsTabText}" />
+                    <!--  ✅ NOVO  -->
+                    <Button
+                        BackgroundColor="{Binding SprayTabBackground}"
+                        Command="{Binding SelectTabCommand}"
+                        CommandParameter="Spray"
+                        Style="{StaticResource TabButtonSmallStyle}"
+                        Text="SPRAY"
+                        TextColor="{Binding SprayTabText}" />
+                    <Button
+                        BackgroundColor="{Binding ProfilesTabBackground}"
+                        Command="{Binding SelectTabCommand}"
+                        CommandParameter="Perfis"
+                        Style="{StaticResource TabButtonStyle}"
+                        Text="PERFIS"
+                        TextColor="{Binding ProfilesTabText}" />
+                    <Button
+                        BackgroundColor="{Binding ConfigTabBackground}"
+                        Command="{Binding SelectTabCommand}"
+                        CommandParameter="Config"
+                        Style="{StaticResource TabButtonSmallStyle}"
+                        Text="CONFIG"
+                        TextColor="{Binding ConfigTabText}" />
+                </HorizontalStackLayout>
+            </ScrollView>
         </Border>
 
         <ScrollView Grid.Row="2">
             <VerticalStackLayout x:Name="TabContentHost" Spacing="12">
-                <Border x:Name="RecoilSection" IsVisible="{Binding IsRecoilTab}" Style="{StaticResource CardBorderStyle}">
+
+                <!--  ── RECOIL (INALTERADO) ───────────────────────────────  -->
+                <Border
+                    x:Name="RecoilSection"
+                    IsVisible="{Binding IsRecoilTab}"
+                    Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="Editor de Perfil" FontFamily="OpenSansSemibold" TextColor="#E6EDF3" />
+                        <Label
+                            FontFamily="OpenSansSemibold"
+                            Text="Editor de Perfil"
+                            TextColor="#E6EDF3" />
                         <Grid ColumnDefinitions="*,*,Auto" ColumnSpacing="8">
-                            <Entry Grid.Column="0" Placeholder="Operador" Text="{Binding OperatorName}" TextColor="#E6EDF3" PlaceholderColor="#6E7681" />
-                            <Entry Grid.Column="1" Placeholder="Arma" Text="{Binding WeaponName}" TextColor="#E6EDF3" PlaceholderColor="#6E7681" />
-                            <Button Grid.Column="2"
-                                    Text="{Binding SideToggleText}"
-                                    Command="{Binding ToggleSideCommand}"
-                                    BackgroundColor="{Binding SideToggleBackground}"
-                                    TextColor="{Binding SideToggleTextColor}"
-                                    WidthRequest="110" />
+                            <Entry
+                                Grid.Column="0"
+                                Placeholder="Operador"
+                                PlaceholderColor="#6E7681"
+                                Text="{Binding OperatorName}"
+                                TextColor="#E6EDF3" />
+                            <Entry
+                                Grid.Column="1"
+                                Placeholder="Arma"
+                                PlaceholderColor="#6E7681"
+                                Text="{Binding WeaponName}"
+                                TextColor="#E6EDF3" />
+                            <Button
+                                Grid.Column="2"
+                                BackgroundColor="{Binding SideToggleBackground}"
+                                Command="{Binding ToggleSideCommand}"
+                                Text="{Binding SideToggleText}"
+                                TextColor="{Binding SideToggleTextColor}"
+                                WidthRequest="110" />
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                            <Label Grid.Column="0" Text="Vertical (Y)" TextColor="#C9D1D9" />
-                            <Entry Grid.Column="1" Text="{Binding StrengthYInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
+                            <Label
+                                Grid.Column="0"
+                                Text="Vertical (Y)"
+                                TextColor="#C9D1D9" />
+                            <Entry
+                                Grid.Column="1"
+                                HorizontalTextAlignment="End"
+                                Keyboard="Numeric"
+                                Text="{Binding StrengthYInput, Mode=TwoWay}"
+                                TextColor="#E6EDF3"
+                                WidthRequest="90" />
                         </Grid>
-                        <Slider Minimum="0" Maximum="15" Value="{Binding StrengthY}" />
+                        <Slider
+                            Maximum="15"
+                            Minimum="0"
+                            Value="{Binding StrengthY}" />
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                            <Label Grid.Column="0" Text="Horizontal (X)" TextColor="#C9D1D9" />
-                            <Entry Grid.Column="1" Text="{Binding StrengthXInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
+                            <Label
+                                Grid.Column="0"
+                                Text="Horizontal (X)"
+                                TextColor="#C9D1D9" />
+                            <Entry
+                                Grid.Column="1"
+                                HorizontalTextAlignment="End"
+                                Keyboard="Numeric"
+                                Text="{Binding StrengthXInput, Mode=TwoWay}"
+                                TextColor="#E6EDF3"
+                                WidthRequest="90" />
                         </Grid>
-                        <Slider Minimum="-8" Maximum="8" Value="{Binding StrengthX}" />
+                        <Slider
+                            Maximum="8"
+                            Minimum="-8"
+                            Value="{Binding StrengthX}" />
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                            <Label Grid.Column="0" Text="Delay (s)" TextColor="#C9D1D9" />
-                            <Entry Grid.Column="1" Text="{Binding DelayInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
+                            <Label
+                                Grid.Column="0"
+                                Text="Delay (s)"
+                                TextColor="#C9D1D9" />
+                            <Entry
+                                Grid.Column="1"
+                                HorizontalTextAlignment="End"
+                                Keyboard="Numeric"
+                                Text="{Binding DelayInput, Mode=TwoWay}"
+                                TextColor="#E6EDF3"
+                                WidthRequest="90" />
                         </Grid>
-                        <Slider Minimum="0.005" Maximum="0.03" Value="{Binding Delay}" />
+                        <Slider
+                            Maximum="0.03"
+                            Minimum="0.005"
+                            Value="{Binding Delay}" />
+
                         <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
-                            <Button Grid.Column="0" Text="Novo" Command="{Binding NewProfileCommand}" BackgroundColor="#30363D" TextColor="#E6EDF3" HorizontalOptions="Start" />
-                            <Button Grid.Column="1" Text="Salvar" Command="{Binding SaveProfileCommand}" BackgroundColor="#238636" TextColor="White" />
-                            <Button Grid.Column="2" Text="Excluir" Command="{Binding DeleteProfileCommand}" BackgroundColor="#DA3633" TextColor="White" />
-                        </Grid>
-                    </VerticalStackLayout>
-                </Border>
-
-                <Border x:Name="CurveSection" IsVisible="{Binding IsCurveTab}" Style="{StaticResource CardBorderStyle}">
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Curva de Progressao" FontFamily="OpenSansSemibold" TextColor="#E6EDF3" />
-                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                            <Label Grid.Column="0" Text="Suavizacao" TextColor="#C9D1D9" />
-                            <Entry Grid.Column="1" Text="{Binding SmoothInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
-                        </Grid>
-                        <Slider Minimum="1" Maximum="15" Value="{Binding Smooth}" />
-
-                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                            <Label Grid.Column="0" Text="Fator Exponencial" TextColor="#C9D1D9" />
-                            <Entry Grid.Column="1" Text="{Binding AccelFactorInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
-                        </Grid>
-                        <Slider Minimum="1" Maximum="3" Value="{Binding AccelFactor}" />
-
-                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                            <Label Grid.Column="0" Text="Max Progressao" TextColor="#C9D1D9" />
-                            <Entry Grid.Column="1" Text="{Binding MaxProgressionInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
-                        </Grid>
-                        <Slider Minimum="1" Maximum="6" Value="{Binding MaxProgression}" />
-                        <Label Text="Ajuste fino para estabilidade e controle no spray longo." FontSize="12" TextColor="#8FA3BF" />
-                    </VerticalStackLayout>
-                </Border>
-
-                <Border x:Name="AdsSection" IsVisible="{Binding IsAdsTab}" Style="{StaticResource CardBorderStyle}">
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="ADS Assist" FontFamily="OpenSansSemibold" TextColor="#E6EDF3" />
-                        <Label Text="{Binding AdsStatusText}" TextColor="{Binding AdsStatusColor}" FontFamily="OpenSansSemibold" />
-                        <Label Text="Atalho global: pressione F3 para ligar/desligar o ADS Assist." FontSize="12" TextColor="#8FA3BF" />
-
-                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                            <Label Grid.Column="0" Text="Tempo ADS (ms)" TextColor="#C9D1D9" />
-                            <Entry Grid.Column="1" Text="{Binding AdsHoldInput, Mode=TwoWay}" Keyboard="Numeric" WidthRequest="90" HorizontalTextAlignment="End" TextColor="#E6EDF3" />
-                        </Grid>
-                        <Slider Minimum="0" Maximum="250" Value="{Binding AdsHoldMilliseconds}" />
-
-                        <Button Text="Alternar ADS (F3)"
-                                Command="{Binding ToggleAdsCommand}"
-                                BackgroundColor="#1F6FEB"
+                            <Button
+                                Grid.Column="0"
+                                BackgroundColor="#30363D"
+                                Command="{Binding NewProfileCommand}"
+                                HorizontalOptions="Start"
+                                Text="Novo"
+                                TextColor="#E6EDF3" />
+                            <Button
+                                Grid.Column="1"
+                                BackgroundColor="#238636"
+                                Command="{Binding SaveProfileCommand}"
+                                Text="Salvar"
                                 TextColor="White" />
+                            <Button
+                                Grid.Column="2"
+                                BackgroundColor="#DA3633"
+                                Command="{Binding DeleteProfileCommand}"
+                                Text="Excluir"
+                                TextColor="White" />
+                        </Grid>
                     </VerticalStackLayout>
                 </Border>
 
-                <Border x:Name="ProfilesSection" IsVisible="{Binding IsProfilesTab}" Style="{StaticResource CardBorderStyle}">
+                <!--  ── CURVA (INALTERADO) ────────────────────────────────  -->
+                <Border
+                    x:Name="CurveSection"
+                    IsVisible="{Binding IsCurveTab}"
+                    Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label
+                            FontFamily="OpenSansSemibold"
+                            Text="Curva de Progressao"
+                            TextColor="#E6EDF3" />
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label
+                                Grid.Column="0"
+                                Text="Suavizacao"
+                                TextColor="#C9D1D9" />
+                            <Entry
+                                Grid.Column="1"
+                                HorizontalTextAlignment="End"
+                                Keyboard="Numeric"
+                                Text="{Binding SmoothInput, Mode=TwoWay}"
+                                TextColor="#E6EDF3"
+                                WidthRequest="90" />
+                        </Grid>
+                        <Slider
+                            Maximum="15"
+                            Minimum="1"
+                            Value="{Binding Smooth}" />
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label
+                                Grid.Column="0"
+                                Text="Fator Exponencial"
+                                TextColor="#C9D1D9" />
+                            <Entry
+                                Grid.Column="1"
+                                HorizontalTextAlignment="End"
+                                Keyboard="Numeric"
+                                Text="{Binding AccelFactorInput, Mode=TwoWay}"
+                                TextColor="#E6EDF3"
+                                WidthRequest="90" />
+                        </Grid>
+                        <Slider
+                            Maximum="3"
+                            Minimum="1"
+                            Value="{Binding AccelFactor}" />
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label
+                                Grid.Column="0"
+                                Text="Max Progressao"
+                                TextColor="#C9D1D9" />
+                            <Entry
+                                Grid.Column="1"
+                                HorizontalTextAlignment="End"
+                                Keyboard="Numeric"
+                                Text="{Binding MaxProgressionInput, Mode=TwoWay}"
+                                TextColor="#E6EDF3"
+                                WidthRequest="90" />
+                        </Grid>
+                        <Slider
+                            Maximum="6"
+                            Minimum="1"
+                            Value="{Binding MaxProgression}" />
+                        <Label
+                            FontSize="12"
+                            Text="Ajuste fino para estabilidade e controle no spray longo."
+                            TextColor="#8FA3BF" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  ── ADS (INALTERADO) ──────────────────────────────────  -->
+                <Border
+                    x:Name="AdsSection"
+                    IsVisible="{Binding IsAdsTab}"
+                    Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label
+                            FontFamily="OpenSansSemibold"
+                            Text="ADS Assist"
+                            TextColor="#E6EDF3" />
+                        <Label
+                            FontFamily="OpenSansSemibold"
+                            Text="{Binding AdsStatusText}"
+                            TextColor="{Binding AdsStatusColor}" />
+                        <Label
+                            FontSize="12"
+                            Text="Atalho global: pressione F3 para ligar/desligar o ADS Assist."
+                            TextColor="#8FA3BF" />
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <Label
+                                Grid.Column="0"
+                                Text="Tempo ADS (ms)"
+                                TextColor="#C9D1D9" />
+                            <Entry
+                                Grid.Column="1"
+                                HorizontalTextAlignment="End"
+                                Keyboard="Numeric"
+                                Text="{Binding AdsHoldInput, Mode=TwoWay}"
+                                TextColor="#E6EDF3"
+                                WidthRequest="90" />
+                        </Grid>
+                        <Slider
+                            Maximum="250"
+                            Minimum="0"
+                            Value="{Binding AdsHoldMilliseconds}" />
+
+                        <Button
+                            BackgroundColor="#1F6FEB"
+                            Command="{Binding ToggleAdsCommand}"
+                            Text="Alternar ADS (F3)"
+                            TextColor="White" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  ── SPRAY (✅ NOVO) ───────────────────────────────────  -->
+                <Border
+                    x:Name="SpraySection"
+                    IsVisible="{Binding IsSprayTab}"
+                    Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="12">
+
+                        <!--  Cabeçalho + toggle de modo  -->
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label
+                                    FontFamily="OpenSansSemibold"
+                                    Text="Spray Table"
+                                    TextColor="#E6EDF3" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SprayPointCount}"
+                                    TextColor="#8FA3BF" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                Spacing="2">
+                                <Label
+                                    FontSize="11"
+                                    HorizontalOptions="End"
+                                    Text="Usar Spray Table"
+                                    TextColor="#9DB2CB" />
+                                <Switch
+                                    HorizontalOptions="End"
+                                    IsToggled="{Binding UseSprayPattern}"
+                                    OnColor="#1F6FEB"
+                                    ThumbColor="White" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!--  Badge de modo ativo  -->
+                        <Border
+                            Padding="8,6"
+                            Background="#1A2740"
+                            Stroke="#2C4A70"
+                            StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8" />
+                            </Border.StrokeShape>
+                            <Border.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding UseSprayPattern}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Background" Value="#123B2F" />
+                                    <Setter Property="Stroke" Value="#2ECC71" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <Label FontFamily="OpenSansSemibold" FontSize="12">
+                                <Label.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding UseSprayPattern}"
+                                        TargetType="Label"
+                                        Value="True">
+                                        <Setter Property="Text" Value="⭐ Modo: SPRAY TABLE — compensação exata por bala" />
+                                        <Setter Property="TextColor" Value="#2ECC71" />
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding UseSprayPattern}"
+                                        TargetType="Label"
+                                        Value="False">
+                                        <Setter Property="Text" Value="Modo: TEMPORAL — fallback automático (curva)" />
+                                        <Setter Property="TextColor" Value="#8FA3BF" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Border>
+
+                        <!--  Cadência (RPM)  -->
+                        <Grid
+                            ColumnDefinitions="*,Auto"
+                            ColumnSpacing="8"
+                            IsVisible="{Binding UseSprayPattern}">
+                            <Label
+                                Grid.Column="0"
+                                Text="Cadência (RPM)"
+                                TextColor="#C9D1D9"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Column="1"
+                                HorizontalTextAlignment="End"
+                                Keyboard="Numeric"
+                                Text="{Binding FireRateRpmInput, Mode=TwoWay}"
+                                TextColor="#E6EDF3"
+                                WidthRequest="90" />
+                        </Grid>
+                        <Slider
+                            IsVisible="{Binding UseSprayPattern}"
+                            Maximum="1200"
+                            Minimum="60"
+                            Value="{Binding FireRateRpm}" />
+
+                        <!--  Adicionar ponto  -->
+                        <Border
+                            Padding="12"
+                            Background="#161F30"
+                            IsVisible="{Binding UseSprayPattern}"
+                            Stroke="#2A3D5A"
+                            StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="10">
+                                <Label
+                                    FontFamily="OpenSansSemibold"
+                                    FontSize="13"
+                                    Text="Adicionar Ponto"
+                                    TextColor="#9DB2CB" />
+                                <Grid ColumnDefinitions="*,*,Auto" ColumnSpacing="8">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                        <Label
+                                            FontSize="11"
+                                            Text="X (horizontal)"
+                                            TextColor="#8FA3BF" />
+                                        <Entry
+                                            HorizontalTextAlignment="End"
+                                            Keyboard="Numeric"
+                                            Placeholder="0.00"
+                                            PlaceholderColor="#6E7681"
+                                            Text="{Binding SprayPointXInput, Mode=TwoWay}"
+                                            TextColor="#E6EDF3" />
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                        <Label
+                                            FontSize="11"
+                                            Text="Y (vertical)"
+                                            TextColor="#8FA3BF" />
+                                        <Entry
+                                            HorizontalTextAlignment="End"
+                                            Keyboard="Numeric"
+                                            Placeholder="0.00"
+                                            PlaceholderColor="#6E7681"
+                                            Text="{Binding SprayPointYInput, Mode=TwoWay}"
+                                            TextColor="#E6EDF3" />
+                                    </VerticalStackLayout>
+                                    <Button
+                                        Grid.Column="2"
+                                        BackgroundColor="#238636"
+                                        Command="{Binding AddSprayPointCommand}"
+                                        FontSize="20"
+                                        Text="＋"
+                                        TextColor="White"
+                                        VerticalOptions="End"
+                                        WidthRequest="48" />
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!--  Lista de pontos  -->
+                        <Border
+                            Padding="0"
+                            Background="Transparent"
+                            IsVisible="{Binding UseSprayPattern}"
+                            Stroke="#253041"
+                            StrokeThickness="1">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout>
+
+                                <!--  Cabeçalho da tabela  -->
+                                <Grid
+                                    Padding="10,8"
+                                    BackgroundColor="#161F30"
+                                    ColumnDefinitions="36,*,80,80,36,36,36"
+                                    ColumnSpacing="6">
+                                    <Label
+                                        Grid.Column="0"
+                                        FontSize="11"
+                                        HorizontalOptions="Center"
+                                        Text="#"
+                                        TextColor="#8FA3BF" />
+                                    <Label
+                                        Grid.Column="1"
+                                        FontSize="11"
+                                        Text="Label"
+                                        TextColor="#8FA3BF" />
+                                    <Label
+                                        Grid.Column="2"
+                                        FontSize="11"
+                                        HorizontalOptions="End"
+                                        Text="X"
+                                        TextColor="#8FA3BF" />
+                                    <Label
+                                        Grid.Column="3"
+                                        FontSize="11"
+                                        HorizontalOptions="End"
+                                        Text="Y"
+                                        TextColor="#8FA3BF" />
+                                    <Label
+                                        Grid.Column="4"
+                                        FontSize="11"
+                                        HorizontalOptions="Center"
+                                        Text="▲"
+                                        TextColor="#8FA3BF" />
+                                    <Label
+                                        Grid.Column="5"
+                                        FontSize="11"
+                                        HorizontalOptions="Center"
+                                        Text="▼"
+                                        TextColor="#8FA3BF" />
+                                    <Label
+                                        Grid.Column="6"
+                                        FontSize="11"
+                                        HorizontalOptions="Center"
+                                        Text="✕"
+                                        TextColor="#8FA3BF" />
+                                </Grid>
+
+                                <CollectionView
+                                    HeightRequest="280"
+                                    ItemsSource="{Binding SprayPoints}"
+                                    SelectionMode="None">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="models:SprayPointEntry">
+                                            <Grid
+                                                Padding="10,6"
+                                                ColumnDefinitions="36,*,80,80,36,36,36"
+                                                ColumnSpacing="6">
+                                                <Grid.Triggers>
+                                                    <DataTrigger
+                                                        Binding="{Binding Index}"
+                                                        TargetType="Grid"
+                                                        Value="0">
+                                                        <Setter Property="BackgroundColor" Value="#111F2E" />
+                                                    </DataTrigger>
+                                                </Grid.Triggers>
+
+                                                <!--  Índice  -->
+                                                <Label
+                                                    Grid.Column="0"
+                                                    FontFamily="OpenSansSemibold"
+                                                    FontSize="12"
+                                                    HorizontalOptions="Center"
+                                                    Text="{Binding Index, StringFormat='#{0}'}"
+                                                    TextColor="#9DB2CB"
+                                                    VerticalOptions="Center" />
+
+                                                <!--  Label  -->
+                                                <Label
+                                                    Grid.Column="1"
+                                                    FontSize="12"
+                                                    Text="{Binding Label}"
+                                                    TextColor="#E6EDF3"
+                                                    VerticalOptions="Center" />
+
+                                                <!--  X  -->
+                                                <Label
+                                                    Grid.Column="2"
+                                                    FontSize="12"
+                                                    HorizontalOptions="End"
+                                                    Text="{Binding X, StringFormat='{0:F2}'}"
+                                                    TextColor="#79C0FF"
+                                                    VerticalOptions="Center" />
+
+                                                <!--  Y  -->
+                                                <Label
+                                                    Grid.Column="3"
+                                                    FontSize="12"
+                                                    HorizontalOptions="End"
+                                                    Text="{Binding Y, StringFormat='{0:F2}'}"
+                                                    TextColor="#56D364"
+                                                    VerticalOptions="Center" />
+
+                                                <!--  Mover para cima  -->
+                                                <Button
+                                                    Grid.Column="4"
+                                                    Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.MoveUpSprayPointCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    Style="{StaticResource RowActionButtonStyle}"
+                                                    Text="▲" />
+
+                                                <!--  Mover para baixo  -->
+                                                <Button
+                                                    Grid.Column="5"
+                                                    Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.MoveDownSprayPointCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    Style="{StaticResource RowActionButtonStyle}"
+                                                    Text="▼" />
+
+                                                <!--  Remover  -->
+                                                <Button
+                                                    Grid.Column="6"
+                                                    BackgroundColor="#3D1C1C"
+                                                    Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.RemoveSprayPointCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    Style="{StaticResource RowActionButtonStyle}"
+                                                    Text="✕"
+                                                    TextColor="#FF7B7B" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!--  Limpar todos os pontos  -->
+                        <Button
+                            BackgroundColor="#30363D"
+                            Command="{Binding ClearSprayPointsCommand}"
+                            IsVisible="{Binding UseSprayPattern}"
+                            Text="Limpar Todos os Pontos"
+                            TextColor="#FF7B7B" />
+
+                        <!--  Ações de perfil  -->
+                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                            <Button
+                                Grid.Column="0"
+                                BackgroundColor="#30363D"
+                                Command="{Binding NewProfileCommand}"
+                                HorizontalOptions="Start"
+                                Text="Novo"
+                                TextColor="#E6EDF3" />
+                            <Button
+                                Grid.Column="1"
+                                BackgroundColor="#238636"
+                                Command="{Binding SaveProfileCommand}"
+                                Text="Salvar"
+                                TextColor="White" />
+                            <Button
+                                Grid.Column="2"
+                                BackgroundColor="#DA3633"
+                                Command="{Binding DeleteProfileCommand}"
+                                Text="Excluir"
+                                TextColor="White" />
+                        </Grid>
+
+                        <Label
+                            FontSize="12"
+                            Text="{Binding FeedbackMessage}"
+                            TextColor="#8FA3BF" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  ── PERFIS (INALTERADO) ───────────────────────────────  -->
+                <Border
+                    x:Name="ProfilesSection"
+                    IsVisible="{Binding IsProfilesTab}"
+                    Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout Spacing="8">
-                        <Label Text="Perfis Salvos" FontFamily="OpenSansSemibold" TextColor="#E6EDF3" />
-                        <Entry Placeholder="Buscar operador ou arma" Text="{Binding SearchQuery}" TextColor="#E6EDF3" PlaceholderColor="#6E7681" />
-                        <Picker Title="Filtro" ItemsSource="{Binding SideFilterChoices}" SelectedItem="{Binding SideFilter}" TextColor="#E6EDF3" TitleColor="#8B949E" />                        <CollectionView ItemsSource="{Binding Profiles}"
-                                        SelectionMode="Single"
-                                        SelectedItem="{Binding SelectedProfile, Mode=TwoWay}">
+                        <Label
+                            FontFamily="OpenSansSemibold"
+                            Text="Perfis Salvos"
+                            TextColor="#E6EDF3" />
+                        <Entry
+                            Placeholder="Buscar operador ou arma"
+                            PlaceholderColor="#6E7681"
+                            Text="{Binding SearchQuery}"
+                            TextColor="#E6EDF3" />
+                        <Picker
+                            Title="Filtro"
+                            ItemsSource="{Binding SideFilterChoices}"
+                            SelectedItem="{Binding SideFilter}"
+                            TextColor="#E6EDF3"
+                            TitleColor="#8B949E" />
+                        <CollectionView
+                            ItemsSource="{Binding Profiles}"
+                            SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
+                            SelectionMode="Single">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="models:WeaponProfile">
-                                    <Border Padding="10" Margin="0,4" Background="#161B22" Stroke="#2D3748" StrokeThickness="1">
+                                    <Border
+                                        Margin="0,4"
+                                        Padding="10"
+                                        Background="#161B22"
+                                        Stroke="#2D3748"
+                                        StrokeThickness="1">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="10" />
                                         </Border.StrokeShape>
                                         <Border.Triggers>
-                                            <DataTrigger TargetType="Border" Binding="{Binding IsActive}" Value="True">
+                                            <DataTrigger
+                                                Binding="{Binding IsActive}"
+                                                TargetType="Border"
+                                                Value="True">
                                                 <Setter Property="Background" Value="#123B2F" />
                                                 <Setter Property="Stroke" Value="#2ECC71" />
                                                 <Setter Property="StrokeThickness" Value="2" />
                                             </DataTrigger>
                                         </Border.Triggers>
                                         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
-                                            <Label Grid.Column="0" Text="{Binding Side}" FontFamily="OpenSansSemibold" VerticalOptions="Center" TextColor="#E6EDF3" />
+                                            <Label
+                                                Grid.Column="0"
+                                                FontFamily="OpenSansSemibold"
+                                                Text="{Binding Side}"
+                                                TextColor="#E6EDF3"
+                                                VerticalOptions="Center" />
                                             <VerticalStackLayout Grid.Column="1" Spacing="2">
-                                                <Label Text="{Binding OperatorName}" FontFamily="OpenSansSemibold" TextColor="#E6EDF3" />
-                                                <Label Text="{Binding WeaponName}" FontSize="12" TextColor="#9BA7B4" />
-                                                <Label Text="EM USO"
-                                                       FontSize="10"
-                                                       FontFamily="OpenSansSemibold"
-                                                       TextColor="#2ECC71"
-                                                       IsVisible="{Binding IsActive}" />
+                                                <Label
+                                                    FontFamily="OpenSansSemibold"
+                                                    Text="{Binding OperatorName}"
+                                                    TextColor="#E6EDF3" />
+                                                <Label
+                                                    FontSize="12"
+                                                    Text="{Binding WeaponName}"
+                                                    TextColor="#9BA7B4" />
+                                                <!--  ✅ Badge Spray Table  -->
+                                                <Label
+                                                    FontFamily="OpenSansSemibold"
+                                                    FontSize="10"
+                                                    IsVisible="{Binding UseSprayPattern}"
+                                                    Text="⭐ SPRAY TABLE"
+                                                    TextColor="#F0A500" />
+                                                <Label
+                                                    FontFamily="OpenSansSemibold"
+                                                    FontSize="10"
+                                                    IsVisible="{Binding IsActive}"
+                                                    Text="EM USO"
+                                                    TextColor="#2ECC71" />
                                             </VerticalStackLayout>
-                                            <Button Grid.Column="2" Text="Carregar"
-                                                    Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.LoadProfileCommand}"
-                                                    CommandParameter="{Binding .}"
-                                                    BackgroundColor="#1F6FEB" TextColor="White" />
+                                            <Button
+                                                Grid.Column="2"
+                                                BackgroundColor="#1F6FEB"
+                                                Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.LoadProfileCommand}"
+                                                CommandParameter="{Binding .}"
+                                                Text="Carregar"
+                                                TextColor="White" />
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
@@ -242,41 +909,38 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <Border x:Name="ConfigSection" IsVisible="{Binding IsConfigTab}" Style="{StaticResource CardBorderStyle}">
+                <!--  ── CONFIG (INALTERADO) ───────────────────────────────  -->
+                <Border
+                    x:Name="ConfigSection"
+                    IsVisible="{Binding IsConfigTab}"
+                    Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="Configuracoes" FontFamily="OpenSansSemibold" TextColor="#E6EDF3" />
-                        <Label Text="{Binding RuntimeSummary}" FontSize="12" TextColor="#8FA3BF" />
-                        <Button Text="Atualizar Lista de Perfis" Command="{Binding RefreshProfilesCommand}" BackgroundColor="#30363D" TextColor="#E6EDF3" />
-                        <Button Text="Resetar Tudo" Command="{Binding ResetProfilesCommand}" BackgroundColor="#9E6A03" TextColor="White" />
-                        <Label Text="UI otimizada para foco e fluxo rapido com menor carga cognitiva." FontSize="12" TextColor="#8FA3BF" />
+                        <Label
+                            FontFamily="OpenSansSemibold"
+                            Text="Configuracoes"
+                            TextColor="#E6EDF3" />
+                        <Label
+                            FontSize="12"
+                            Text="{Binding RuntimeSummary}"
+                            TextColor="#8FA3BF" />
+                        <Button
+                            BackgroundColor="#30363D"
+                            Command="{Binding RefreshProfilesCommand}"
+                            Text="Atualizar Lista de Perfis"
+                            TextColor="#E6EDF3" />
+                        <Button
+                            BackgroundColor="#9E6A03"
+                            Command="{Binding ResetProfilesCommand}"
+                            Text="Resetar Tudo"
+                            TextColor="White" />
+                        <Label
+                            FontSize="12"
+                            Text="UI otimizada para foco e fluxo rapido com menor carga cognitiva."
+                            TextColor="#8FA3BF" />
                     </VerticalStackLayout>
                 </Border>
+
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
 </ContentPage>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
